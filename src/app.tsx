@@ -154,6 +154,8 @@ export function App() {
       setMouseTriangle(triangle);
     } finally {
       // setText(t.map(x => typeof x === "number" ? x.toFixed(3) : x).join(" "));
+      event.preventDefault();
+      event.stopImmediatePropagation();
     }
   }
 
