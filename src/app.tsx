@@ -91,8 +91,8 @@ export function App() {
       // convert browser coordinates to our logical coordinates
       const {left, top} = canvas.getBoundingClientRect();
       const {clientX, clientY} = event;
-      const x = ((clientX - left - dotSize/2) / size - .5);
-      const y = ((clientY - top  - dotSize/2) / size - .5);
+      const x = ((clientX - left - padding - dotSize/2) / size - .5);
+      const y = ((clientY - top  - padding - dotSize/2) / size - .5);
       t.push("\nxy:", x, y);
 
       // In getTriangleData() we map the squared side lengths of the triangle
