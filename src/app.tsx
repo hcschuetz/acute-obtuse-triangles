@@ -186,7 +186,7 @@ export function App() {
           >this Eigenraum episode</a>
         </p>
         <p>
-          The first image contains points representing {n} random acute triangles.
+          The first image contains points representing {n} random triangles.
           We do not care about position, orientation or absolute side lengths
           but only about length ratios or, equivalently, about the angles.
           In other words, we care about classes of similar triangles.
