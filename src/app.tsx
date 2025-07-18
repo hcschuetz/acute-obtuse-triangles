@@ -183,7 +183,7 @@ export function App() {
           Inspired by {}
           <a href="https://eigenpod.de/eig051-dreiecke-unterm-kopfkissen/"
             target="_blank" rel="noopener noreferrer"
-          >this Eigenraum episode</a>
+          >Eigenraum episode 51</a>
         </p>
         <p>
           The first image contains points representing {n} random triangles.
