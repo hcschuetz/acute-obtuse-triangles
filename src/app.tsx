@@ -190,18 +190,17 @@ export function App() {
           We do not care about position, orientation or absolute side lengths
           but only about length ratios or, equivalently, about the angles.
           In other words, we care about classes of similar triangles.
-          Such a class can be described by 2 numeric parameters and thus
-          represented as a point in 2D space.
-          (For details of the random distribution and the mapping of triangles
-          to 2D points have a look at the code or at the Eigenraum episode and
-          its referenced literature.)
+          Such a class can be described by 2 numeric parameters
+          and can thus be represented as a point in 2D space.
+          (For details of the random distribution
+          and of the mapping between triangles and 2D points
+          have a look at the code
+          or at the Eigenraum episode and its referenced literature.)
         </p>
         <p>
-          The black points in the inner triangle represent acute triangles.
-          The surrounding colored segments contain the points representing
-          obtuse triangles.
-          There the points are colored according to which of the three angles is
-          obtuse.
+          Black points represent acute triangles.
+          The other points represent obtuse triangles
+          with the colors indicating which of the three angles is the obtuse one.
         </p>
         <p>
           Move your mouse pointer into the circle.
