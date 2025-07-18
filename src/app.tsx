@@ -154,6 +154,10 @@ export function App() {
       setMouseTriangle(triangle);
     } finally {
       // setText(t.map(x => typeof x === "number" ? x.toFixed(3) : x).join(" "));
+
+      // I hoped that the following calls improve the behavior on touch screens,
+      // but they don't help.  (And for now I am too lazy to figure out another
+      // solution.)
       event.preventDefault();
       event.stopImmediatePropagation();
     }
