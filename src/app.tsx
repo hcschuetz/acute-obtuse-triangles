@@ -194,7 +194,10 @@ export function App() {
           and can thus be represented as a point in 2D space.
           (For details of the random distribution
           and of the mapping between triangles and 2D points
-          have a look at the code
+          have a look at
+          {} <a href="https://github.com/hcschuetz/acute-obtuse-triangles"
+            target="_blank" rel="noopener noreferrer"
+            >the code</a> {}
           or at the Eigenraum episode and its referenced literature.)
         </p>
         <p>
