@@ -133,9 +133,12 @@ export function App() {
       // 2*𝛽, 2*𝛾 between them.
       // This ensures that the angles at the vertices are 𝛼, 𝛽, 𝛾 according to
       // the inscribed-angle theorem.
-      const           A: Point = [1, 0];
-      const 𝛽2 = 2*𝛽, C: Point = [Math.cos(𝛽2), Math.sin(𝛽2)];
-      const 𝛾2 = 2*𝛾, B: Point = [Math.cos(𝛾2), -Math.sin(𝛾2)];
+      // The relatively complicated formulas for the "position angles"
+      // angleA, angleB, and angleC ensure some symmetry in the attitude
+      // assignment.
+      const angleA = (       2*(𝛽 - 𝛾))/3, A: Point = [Math.cos(angleA), Math.sin(angleA)];
+      const angleB = ( TAU + 2*(𝛾 - 𝛼))/3, B: Point = [Math.cos(angleB), Math.sin(angleB)];
+      const angleC = (-TAU + 2*(𝛼 - 𝛽))/3, C: Point = [Math.cos(angleC), Math.sin(angleC)];
       const triangle: Triangle = [A, B, C];
 
       // Scale the triangle so that the squared side lengths sum up to 1:
