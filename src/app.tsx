@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
+import type { TargetedEvent } from 'preact/compat';
+
 import './app.css';
+
 
 const n = 1e5;
 const size = 600;
@@ -77,7 +80,7 @@ export function App() {
   const [mouseTriangle, setMouseTriangle] = useState<[Point, Point, Point]>();
   const [angles, setAngles] = useState<[number, number, number]>();
   const [text, setText] = useState("");
-  function handleMouse(event: MouseEvent) {
+  function handleMouse(event: TargetedEvent<Element, MouseEvent>) {
     // TODO decompose this into several functions
 
     const t: Array<string | number> = ["Debug Output:"];
@@ -85,11 +88,8 @@ export function App() {
       setMouseTriangle(undefined);
       setAngles(undefined);
 
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-
       // convert browser coordinates to our logical coordinates
-      const {left, top} = canvas.getBoundingClientRect();
+      const {left, top} = event.currentTarget.getBoundingClientRect();
       const {clientX, clientY} = event;
       const x = ((clientX - left - padding - dotSize/2) / size - .5);
       const y = ((clientY - top  - padding - dotSize/2) / size - .5);
@@ -163,6 +163,15 @@ export function App() {
     }
   }
 
+  const mousePosToTriangle = {
+    onMouseMove: handleMouse,
+    onMouseEnter: handleMouse,
+    onMouseLeave: () => {
+      setMouseTriangle(undefined);
+      setAngles(undefined);
+    },
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -226,13 +235,8 @@ export function App() {
         <div style={{display: "inline-block", width: size + dotSize + 2*padding}}>
           <canvas ref={canvasRef}
             width={size + dotSize} height={size + dotSize}
-            onMouseMove={handleMouse}
-            onMouseEnter={handleMouse}
-            onMouseLeave={() => {
-              setMouseTriangle(undefined);
-              setAngles(undefined);
-            }}
             style={{background: "#eee", padding}}
+            {...mousePosToTriangle}
           ></canvas>
           <div>
             {angleNames.map(obtuse => (
@@ -269,10 +273,76 @@ export function App() {
                 </span>
               </>)
             })}
+            {/* zero width space ensuring text height even without angles: */}
+            &#x200b;
           </div>
         </div>
       </div>
       {!false && <pre>{text}</pre>}
+      <div style={{maxWidth: "600px", margin: "0 auto"}}>
+        <h1>Isogonic Lines</h1>
+        <p>
+          In the first image all the triangles
+          where a particular vertex has a right angle
+          are mapped to points on a straight line,
+          namely the border between the black central triangle and
+          the segment with the vertex color.
+          So I was curious along which lines you find the points for triangles
+          with a particular vertex having some other fixed angle.
+          For these lines I borrow the term "isogonic" from geology.
+        </p>
+        <p>
+          The following image contains the isogonic lines
+          for the three vertices and the angles
+          15°, 30°, 45°, 60°, 75°, 90°, 105°, 120°, 135°, 150°, 165°.
+          (The outermost black circle contains the points for degenerate
+          triangles with at least one 0° angle.)
+        </p>
+        <p>
+          Again you can move your mouse pointer into the image
+          to see an example triangle.
+        </p>
+        <div style={{display: "inline-block", width: size + dotSize + 2*padding}}>
+          <svg width={size + dotSize} height={size + dotSize}
+            style={{background: "#eee", padding}}
+            {...mousePosToTriangle}
+          >
+            <g transform={`
+              translate(${dotSize/2}, ${dotSize/2})
+              scale(${(size)})
+              translate(.5, .5)
+            `}>
+              <g stroke="#00f">
+                <g id="isogons" stroke-width={.003} fill="none">
+                  {(() => {
+                    const A: Point = [1, 0];
+                    return Array.from({length: 13}, (_, i) => {
+                      const 𝛾2 = TAU/12 * i;
+                      const rest = TAU - 𝛾2;
+                      const B: Point = [Math.cos(𝛾2), Math.sin(𝛾2)];
+                      return (
+                        <polyline points={
+                          Array.from({length: 121}, (_, j) => {
+                            const 𝛽2 = -rest/120 * j;
+                            const C: Point = [Math.cos(𝛽2), Math.sin(𝛽2)];
+                            return getTriangleData([A, B, C])?.xy ?? [];
+                          }).flat().join(" ")
+                        }/>
+                      )
+                    })
+                  })()}
+                </g>
+              </g>
+              <g stroke="#f00" transform="rotate(+120)"><use href="#isogons"/></g>
+              <g stroke="#0f0" transform="rotate(-120)"><use href="#isogons"/></g>
+              <circle r={.5} stroke-width={.003} stroke="#000" fill="none"/>
+            </g>
+          </svg>
+          <div>
+            ###
+          </div>
+        </div>
+      </div>
     </>
   )
 }
