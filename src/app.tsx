@@ -79,11 +79,15 @@ export function App() {
 
   const [mouseTriangle, setMouseTriangle] = useState<[Point, Point, Point]>();
   const [angles, setAngles] = useState<[number, number, number]>();
-  const [text, setText] = useState("");
+  const [debugText, setDebugText] = useState("");
   function handleMouse(event: TargetedEvent<Element, MouseEvent>) {
     // TODO decompose this into several functions
 
-    const t: Array<string | number> = ["Debug Output:"];
+    const debugData: Array<string | number> = [];
+    function debug(...args: Array<string | number>) {
+      // debugData.push(...args);
+    }
+    debug("Debug Output:");
     try {
       setMouseTriangle(undefined);
       setAngles(undefined);
@@ -93,7 +97,7 @@ export function App() {
       const {clientX, clientY} = event;
       const x = ((clientX - left - padding - dotSize/2) / size - .5);
       const y = ((clientY - top  - padding - dotSize/2) / size - .5);
-      t.push("\nxy:", x, y);
+      debug("\nxy:", x, y);
 
       // In getTriangleData() we map the squared side lengths of the triangle
       // to xy coordinates in the dots canvas:
@@ -106,9 +110,9 @@ export function App() {
       const aa = p + x;
       const bb = p + q;
       const cc = p - q;
-      t.push("\nside-length squares:", aa+bb+cc, aa, bb, cc)
+      debug("\nside-length squares:", aa+bb+cc, aa, bb, cc)
       if (aa < 0 || bb < 0 || cc < 0) {
-        t.push("\nnegative side-length square");
+        debug("\nnegative side-length square");
         return; 
       }
 
@@ -118,15 +122,15 @@ export function App() {
       const cos𝛼 = (.5 - aa)/Math.sqrt(bb*cc);
       const cos𝛽 = (.5 - bb)/Math.sqrt(aa*cc);
       const cos𝛾 = (.5 - cc)/Math.sqrt(aa*bb);
-      t.push("\ncosines:", cos𝛼, cos𝛽, cos𝛾);
+      debug("\ncosines:", cos𝛼, cos𝛽, cos𝛾);
       if (Math.abs(cos𝛼) > 1 || Math.abs(cos𝛽) > 1 || Math.abs(cos𝛾) > 1) {
-        t.push("\ncosine out of range");
+        debug("\ncosine out of range");
         return;
       }
       const 𝛼 = Math.acos(cos𝛼);
       const 𝛽 = Math.acos(cos𝛽);
       const 𝛾 = Math.acos(cos𝛾);
-      t.push("\nangles:", 𝛼+𝛽+𝛾, 𝛼, 𝛽, 𝛾);
+      debug("\nangles:", 𝛼+𝛽+𝛾, 𝛼, 𝛽, 𝛾);
       setAngles([𝛼, 𝛽, 𝛾]);
 
       // Place the triangle vertices on the unit circle with double angles 2*𝛼,
@@ -143,20 +147,22 @@ export function App() {
 
       // Scale the triangle so that the squared side lengths sum up to 1:
       const scale = 1/Math.sqrt(distSq(B, C) + distSq(A, C) + distSq(A, B));
-      t.push("\nscale:", scale);
+      debug("\nscale:", scale);
       triangle.forEach(point => [0,1].forEach(i => point[i] *= scale));
 
       // Move the triangle 
       const xCenter = (A[0] + B[0] + C[0]) / 3;
       const yCenter = (A[1] + B[1] + C[1]) / 3;
       triangle.forEach(point => {point[0] -= xCenter; point[1] -= yCenter});
-      t.push("\ncoords:", ...triangle.flat(1));
-      t.push("\nside-length squares:", distSq(B, C), distSq(A, C), distSq(A, B));
+      debug("\ncoords:", ...triangle.flat(1));
+      debug("\nside-length squares:", distSq(B, C), distSq(A, C), distSq(A, B));
 
       // This finally is the triangle to draw:
       setMouseTriangle(triangle);
     } finally {
-      // setText(t.map(x => typeof x === "number" ? x.toFixed(3) : x).join(" "));
+      setDebugText(debugData.map(x =>
+        typeof x === "number" ? x.toFixed(3) : x).join(" ")
+      );
 
       // I hoped that the following calls improve the behavior on touch screens,
       // but they don't help.  (And for now I am too lazy to figure out another
@@ -281,7 +287,7 @@ export function App() {
           </div>
         </div>
       </div>
-      {!false && <pre>{text}</pre>}
+      <pre>{debugText}</pre>
       <div style={{maxWidth: "600px", margin: "0 auto"}}>
         <h1>Isogonic Lines</h1>
         <p>
