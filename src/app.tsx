@@ -341,9 +341,6 @@ export function App() {
               <circle r={.5} stroke-width={.003} stroke="#000" fill="none"/>
             </g>
           </svg>
-          <div>
-            ###
-          </div>
         </div>
       </div>
     </>
