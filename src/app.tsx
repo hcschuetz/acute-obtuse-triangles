@@ -150,7 +150,7 @@ export function App() {
       debug("\nscale:", scale);
       triangle.forEach(point => [0,1].forEach(i => point[i] *= scale));
 
-      // Move the triangle 
+      // Move the triangle so that its centroid is at the canvas center.
       const xCenter = (A[0] + B[0] + C[0]) / 3;
       const yCenter = (A[1] + B[1] + C[1]) / 3;
       triangle.forEach(point => {point[0] -= xCenter; point[1] -= yCenter});
