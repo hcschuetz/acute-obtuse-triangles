@@ -131,9 +131,9 @@ export function App() {
       // The relatively complicated formulas for the "position angles"
       // angleA, angleB, and angleC ensure some symmetry in the attitude
       // assignment.
-      const angleA = (       2*(𝛽 - 𝛾))/3, A: Point = [Math.cos(angleA), Math.sin(angleA)];
-      const angleB = ( TAU + 2*(𝛾 - 𝛼))/3, B: Point = [Math.cos(angleB), Math.sin(angleB)];
-      const angleC = (-TAU + 2*(𝛼 - 𝛽))/3, C: Point = [Math.cos(angleC), Math.sin(angleC)];
+      const angleA = (       2*(𝛽 - 𝛾))/3 + TAU/2, A: Point = [Math.cos(angleA), Math.sin(angleA)];
+      const angleB = ( TAU + 2*(𝛾 - 𝛼))/3 + TAU/2, B: Point = [Math.cos(angleB), Math.sin(angleB)];
+      const angleC = (-TAU + 2*(𝛼 - 𝛽))/3 + TAU/2, C: Point = [Math.cos(angleC), Math.sin(angleC)];
       const triangle: Triangle = [A, B, C];
 
       // Scale the triangle so that the squared side lengths sum up to 1:
