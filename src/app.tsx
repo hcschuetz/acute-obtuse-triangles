@@ -24,13 +24,6 @@ type AngleName = (typeof angleNames)[number];
 
 const TAU = 2 * Math.PI;
 
-function BoxMullerPair(): Point {
-  // Essentially from Wikipedia
-  let theta = TAU * Math.random();
-  let R = Math.sqrt(-2 * Math.log(Math.random()));
-  return [R * Math.cos(theta), R * Math.sin(theta)];
-}
-
 function distSq([x0, y0]: Point, [x1, y1]: Point): number {
   const dx = x1 - x0, dy = y1 - y0;
   return dx*dx + dy*dy;
@@ -39,16 +32,14 @@ function distSq([x0, y0]: Point, [x1, y1]: Point): number {
 const r3 = Math.sqrt(3);
 const r3half = Math.sqrt(3) / 2;
 
-function randomTriangle() : Triangle {
-  if (false) {
-    // Distribution by M. Osterhoff (vertices on unit circle):
-    return [0, TAU * Math.random(), TAU * Math.random()].map(
-      theta => [Math.cos(theta), Math.sin(theta)]
-    ) as Triangle;
-  }
-  // Distribution by Eigenraum (normally distributed vertices)
-  return [BoxMullerPair(), BoxMullerPair(), BoxMullerPair()];
-}
+const randomTriangle = () =>
+  Array.from({length: 3}, () => {
+    const theta = TAU * Math.random();
+    const r =
+      // 1; // vertices uniformly distributed on unit circle
+      Math.sqrt(-2 * Math.log(Math.random())); // normally distributed vertices
+    return [r * Math.cos(theta), r * Math.sin(theta)];
+  }) as Triangle;
 
 function getTriangleData([A, B, C]: Triangle): {xy: Point, obtuse: AngleName} | null {
   const aSq = distSq(B, C);
